@@ -12,7 +12,7 @@ def main():
     data = file_parse.get_parsed_data()
     rating = LocationManager(args.get_year(), data, args.get_coord(), GeoManager(), CoordManager()).get_location_rating()
     print(rating)
-    # HtmlCreator(rating).create()
+    HtmlCreator(rating, args.get_coord()).create()
 
 
 if __name__ == '__main__':
