@@ -1,13 +1,21 @@
+"""
+Module responsible for parsing input data.
+"""
+
 import argparse as arg
 
 from containers.arg_cont import ArgCont
 
 
 class ArgManager:
-    def _parse_arg(self):
-        pass
-
+    """
+    Class is responsible for input data and their processing.
+    """
     def get_args(self) -> ArgCont:
+        """
+        A method that retrieves data, parses it and fills the container of parsing data.
+        :return: container with parsed data.
+        """
         parser = arg.ArgumentParser()
         parser.add_argument('year', type=str, help='the year when film was taken.')
         parser.add_argument('latitude', type=float, help='first part of coordinate(широта).')
@@ -18,6 +26,6 @@ class ArgManager:
         latitude = argps.latitude
         longitude = argps.longitude
         data_path = argps.data_file_path
-        print((latitude, longitude))
+        # print((latitude, longitude))
         arg_container = ArgCont(year, (latitude, longitude), data_path)
         return arg_container
