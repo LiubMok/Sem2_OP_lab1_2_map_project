@@ -43,7 +43,7 @@ class LocationManager:
                 result.append(data)
 
         return result
-
+    # TODO: doctest!!!
     def get_location_rating(self):
         """
         A method that sorts data from the _get_year_rating method.

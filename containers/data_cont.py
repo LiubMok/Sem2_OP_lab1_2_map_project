@@ -8,6 +8,7 @@ class DataCont:
     Class that is responsible for storing and transferring information to other
     classes, to avoid direct interaction between information.
     """
+
     def __init__(self, movie_name, movie_year, movie_location_name) -> None:
         """
         Creating custom classes allows us to define new types of objects with particular
@@ -52,9 +53,8 @@ class DataCont:
 
     def set_movie_distance_to_point(self, distance_to_point):
         """
-        Typical setter for
-        :param distance_to_point:
-        :return:
+        Typical setter for distance_to_point
+        :param distance_to_point:distance between two points.
         """
         self._movie_distance_to_point = distance_to_point
 
@@ -67,11 +67,14 @@ class DataCont:
 
     def set_movie_location_coord(self, location_coords):
         """
-        Typical setter for
-        :param location_coords:
-        :return:
+        Typical setter for location_coords
+        :param location_coords: coordinates of the location where film was taken.
         """
         self._movie_location_coord = location_coords
 
-    def to_string(self):
+    def to_string(self) -> str:
+        """
+        Method create string with the input for class data
+        :return: string
+        """
         return f"{self._movie_name}, {self._movie_year}, {self._movie_location_name}, {self._movie_location_coord}, {self._movie_distance_to_point} "

@@ -1,3 +1,6 @@
+"""
+This module decodes the input file and parses its information.
+"""
 import codecs
 import time
 
@@ -5,21 +8,23 @@ from containers.data_cont import DataCont
 
 
 class LocationFileParser:
+    """
+    The class that processes the input file.
+    """
     def __init__(self, file_f_path):
+        """
+        Creating custom classes allows us to define new types of objects with particular
+        attributes and functionalities specific to our work needs.
+        :param file_f_path: path to the input file.
+        """
         self._file_path = file_f_path
 
-    # def get_utf_encoded_file(self) -> str:
-    #     blockSize = 1048576
-    #     with codecs.open(self._file_path, "r", encoding="mbcs") as sourceFile:
-    #         with codecs.open("data_base.txt", "w", encoding="UTF-8") as targetFile:
-    #             while True:
-    #                 contents = sourceFile.read(blockSize)
-    #                 if not contents:
-    #                     break
-    #                 targetFile.write(contents)
-    #     return "data_base.txt"
-
-    def get_parsed_data(self):
+    def get_parsed_data(self) -> list:
+        """
+        The method that decodes and parses the file +
+        generates a list of easy-to-handle information.
+        :return: the file is rewritten in the list.
+        """
         with codecs.open(self._file_path, "r", encoding="mbcs") as file:
             lines = file.readlines()[14:-1]
             result_list = []
@@ -32,18 +37,7 @@ class LocationFileParser:
                         .endswith(')') else without_new_line[-1]
                         .replace(',', ';')]
                     # print(result)
-                    # time.sleep(1)
                     result_list.append(DataCont(result[0], result[1], result[2]))
                 except IndexError:
                     print("error")
-
-            # with open('location_base.csv', 'w', encoding='utf-8') as file_2:
-            #     file_2.write('Film,Year,Location\n')
-            #     for l_ine in final:
-            #         for element in l_ine:
-            #             if l_ine[-1] == element:
-            #                 file_2.write(element)
-            #             else:
-            #                 file_2.write(element + ',')
-            #         file_2.write('\n')
             return result_list

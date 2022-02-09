@@ -1,4 +1,5 @@
-"""The main module which includes a call to all other
+"""
+The main module which includes a call to all other
 modules and start the program
 """
 
