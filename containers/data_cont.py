@@ -72,3 +72,6 @@ class DataCont:
         :return:
         """
         self._movie_location_coord = location_coords
+
+    def to_string(self):
+        return f"{self._movie_name}, {self._movie_year}, {self._movie_location_name}, {self._movie_location_coord}, {self._movie_distance_to_point} "

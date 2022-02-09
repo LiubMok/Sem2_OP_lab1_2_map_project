@@ -3,7 +3,7 @@ modules and start the program
 """
 
 from modules.arg_manager import ArgManager
-from modules.cache_geolocation_manager import CacheGeolocationManagerList
+from modules.cache_geolocation_manager import CacheGeolocationManagerList, CacheGeolocationManagerFileSave
 from modules.coord_manager import CoordManager
 from modules.geolocation_manager import GeoManager
 from modules.html_creator import HtmlCreator
@@ -22,7 +22,7 @@ def main():
         args.get_year(),
         parsed_data,
         args.get_coord(),
-        GeoManager(CacheGeolocationManagerList()),
+        GeoManager(CacheGeolocationManagerFileSave()),
         CoordManager()
     ).get_location_rating()
     HtmlCreator(rating, args.get_coord()).create()

@@ -1,6 +1,7 @@
 """
 A module that acts as a cache.
 """
+import pandas as pd
 
 from containers.data_cont import DataCont
 
@@ -23,7 +24,7 @@ class CacheGeolocationManagerList:
         :param loc_name: the name of the location as a key.
         :param coord: coordinates as values.
         """
-        # print(f"cache add: {loc_name} -> {coord}")
+        print(f"cache add: {loc_name} -> {coord}")
         self.cache_data[loc_name] = coord
 
     def get(self, loc_name: str) -> tuple:
@@ -44,5 +45,55 @@ class CacheGeolocationManagerList:
         # print(loc_name)
         # time.sleep(1)
         is_inside = loc_name in self.cache_data.keys()
-        print(f"cache check: {loc_name} -> {is_inside}")
+        # print(f"cache check: {loc_name} -> {is_inside}")
         return is_inside
+
+
+from csv import DictWriter
+
+
+class CacheGeolocationManagerFileSave:
+
+    def __init__(self) -> None:
+        self.saved_cache_filename = "saved_cache.csv"
+        self.cache_data: dict = {}
+        self._load_saved_cache()
+        # print(self.cache_data)
+        print(f"Loaded {len(self.cache_data)} cached lines")
+
+    def add(self, loc_name, coord):
+        print(f"cache add: {loc_name} -> {coord}")
+        self._save_to_cache(loc_name, coord)
+        self.cache_data[loc_name] = coord
+
+    def get(self, loc_name):
+        # print(f"cache get: {loc_name}")
+        return self.cache_data[loc_name]
+
+    def check(self, loc_name):
+        # print(loc_name)
+        # time.sleep(1)
+        is_inside = loc_name in self.cache_data.keys()
+        # print(f"cache check: {loc_name} -> {is_inside}")
+        return is_inside
+
+    def _save_to_cache(self, movie_name, coord):
+        field_names = ['NAME', 'LOCATION_COORD']
+
+        line_to_save = {
+            "NAME": movie_name,
+            'LOCATION_COORD': f"{coord[0]}, {coord[1]}"
+        }
+
+        with open(self.saved_cache_filename, 'a') as f_object:
+            dictwriter_object = DictWriter(f_object, fieldnames=field_names)
+            dictwriter_object.writerow(line_to_save)
+            f_object.close()
+
+    def _load_saved_cache(self):
+        read_csv = pd.read_csv(self.saved_cache_filename)
+        for line in read_csv.values:
+            split_tuple = line[1].split(",")
+            movie_name = line[0]
+            tuple_location_coord = (split_tuple[0], split_tuple[1])
+            self.cache_data[movie_name] = tuple_location_coord
