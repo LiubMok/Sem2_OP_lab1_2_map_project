@@ -48,7 +48,7 @@ class HtmlCreator:
         return fg
 
     def open_html_in_browser(self, path_to_html_file):
-        url = f'file:///{path_to_html_file}'
+        url = f'{path_to_html_file}'
         webbrowser.open(url, new=2)
 
     def create(self):

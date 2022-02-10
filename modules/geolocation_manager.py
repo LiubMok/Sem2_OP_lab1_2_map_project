@@ -5,6 +5,7 @@ from typing import Optional
 
 import geopy
 from geopy import Nominatim
+from geopy.exc import GeocoderUnavailable
 from geopy.extra.rate_limiter import RateLimiter
 
 from modules.cache_geolocation_manager import CacheGeolocationManagerList
@@ -33,7 +34,7 @@ class GeoManager:
         >>> self._join_in_str(['Chicago', 'Illinois', 'USA'])
         Chicago, Illinois, USA
         """
-        return ''.join(part_location + ', ' for part_location in list_to_convert).rstrip(', ')
+        return ''.join(part_location + ' ' for part_location in list_to_convert).rstrip(', ')
 
     # TODO: rename
     def _find_coords(self, scope_data: str) -> Optional[tuple]:
@@ -50,16 +51,20 @@ class GeoManager:
         geocode = RateLimiter(geolocator.geocode, min_delay_seconds=1)
         if self.cache_geolocation.check(scope_data):
             return self.cache_geolocation.get(scope_data)
-        founded_result = geolocator.geocode(scope_data)
-        if founded_result is not None:
-            try:
+        try:
+            founded_result = geolocator.geocode(scope_data)
+            if founded_result is not None and "None" not in founded_result:
+
                 tuple_coord = (founded_result.latitude, founded_result.longitude)
                 self.cache_geolocation.add(scope_data, tuple_coord)
                 return tuple_coord
-            except geopy.exc.GeocoderUnavailable:
+
+            else:
+                self.cache_geolocation.add(scope_data, "None")
                 return None
-        else:
-            return None
+        except GeocoderUnavailable:
+            self.cache_geolocation.add(scope_data, "None")
+        return None
 
     def find_coords(self, location_name: str) -> Optional[tuple]:
         """
@@ -73,10 +78,11 @@ class GeoManager:
         """
         splited_by_dot = location_name.split(';')
         for count in range(len(splited_by_dot)):
-            data_to_find = splited_by_dot[count:]
-            founded_coords = self._find_coords(self._join_in_str(data_to_find))
-            if founded_coords is not None:
+            data_to_find = self._join_in_str(splited_by_dot[count:])
+            founded_coords = self._find_coords(data_to_find)
+            if founded_coords is not None and "None" not in founded_coords:
                 return founded_coords[0], founded_coords[1]
             else:
-                print("None")
+                # print(f"None found for {data_to_find}")
+                pass
         return tuple((0, 0))

@@ -1,9 +1,6 @@
 """
 A module that acts as a cache.
 """
-import pandas as pd
-
-from containers.data_cont import DataCont
 
 from csv import DictWriter
 
@@ -27,7 +24,7 @@ class CacheGeolocationManagerList:
         :param loc_name: the name of the location as a key.
         :param coord: coordinates as values.
         """
-        print(f"cache add: {loc_name} -> {coord}")
+        # print(f"cache add: {loc_name} -> {coord}")
         self.cache_data[loc_name] = coord
 
     def get(self, loc_name: str) -> tuple:
@@ -62,6 +59,8 @@ class CacheGeolocationManagerFileSave:
         Creating custom classes allows us to define new types of objects with particular
         attributes and functionalities specific to our work needs.
         """
+        self.get_count = 0
+
         self.saved_cache_filename = "saved_cache.csv"
         self.cache_data: dict = {}
         self._load_saved_cache()
@@ -74,7 +73,8 @@ class CacheGeolocationManagerFileSave:
         :param loc_name: the name of the location as a key.
         :param coord: coordinates as values.
         """
-        print(f"cache add: {loc_name} -> {coord}")
+        self.get_count += 1
+        # print(f"location_checked -> {self.get_count} : cache add: {loc_name} -> {coord}")
         self._save_to_cache(loc_name, coord)
         self.cache_data[loc_name] = coord
 
@@ -85,6 +85,7 @@ class CacheGeolocationManagerFileSave:
         :return: the value of the dictionary by key
         """
         # print(f"cache get: {loc_name}")
+        self.get_count += 1
         return self.cache_data[loc_name]
 
     def check(self, loc_name):
@@ -93,8 +94,6 @@ class CacheGeolocationManagerFileSave:
         :param loc_name: the name of the location as a key.
         :return: boolean depending on whether there is a key or not.
         """
-        # print(loc_name)
-        # time.sleep(1)
         is_inside = loc_name in self.cache_data.keys()
         # print(f"cache check: {loc_name} -> {is_inside}")
         return is_inside
@@ -109,7 +108,7 @@ class CacheGeolocationManagerFileSave:
 
         line_to_save = {
             "NAME": movie_name,
-            'LOCATION_COORD': f"{coord[0]}, {coord[1]}"
+            'LOCATION_COORD': f"{coord[0]}, {coord[1]}" if "None" not in coord else coord
         }
 
         with open(self.saved_cache_filename, 'a') as f_object:
@@ -121,9 +120,22 @@ class CacheGeolocationManagerFileSave:
         """
         Method read cache file in the start of the program.
         """
-        read_csv = pd.read_csv(self.saved_cache_filename)
-        for line in read_csv.values:
-            split_tuple = line[1].split(",")
-            movie_name = line[0]
-            tuple_location_coord = (split_tuple[0], split_tuple[1])
-            self.cache_data[movie_name] = tuple_location_coord
+        def clean(word):
+            return word.replace("\'", "").replace("\"", "")
+
+        with open(self.saved_cache_filename) as file:
+            content = file.readlines()
+        header = content[:1]
+        rows = content[1:]
+        for line in rows:
+            if len(line) > 1:
+                split_data = line.split(",")
+                location_name = split_data[0]
+
+                # If location can`t be founded -> value = None
+                if "None" not in split_data[1]:
+                    tuple_location_coord = (clean(split_data[1]), clean(split_data[2]))
+                else:
+                    tuple_location_coord = None
+
+                self.cache_data[location_name] = tuple_location_coord
