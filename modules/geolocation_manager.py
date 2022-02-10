@@ -34,7 +34,7 @@ class GeoManager:
         """
         return ''.join(part_location + ', ' for part_location in list_to_convert).rstrip(', ')
 
-    # TODO: rename + doctest!
+    # TODO: rename
     def _find_coords(self, scope_data: str) -> Optional[tuple]:
         """
         Method for finding coordinates by location.
