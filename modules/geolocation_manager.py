@@ -3,6 +3,7 @@ Module for finding coordinates and processing input data.
 """
 from typing import Optional
 
+import geopy
 from geopy import Nominatim
 from geopy.extra.rate_limiter import RateLimiter
 
@@ -51,9 +52,12 @@ class GeoManager:
             return self.cache_geolocation.get(scope_data)
         founded_result = geolocator.geocode(scope_data)
         if founded_result is not None:
-            tuple_coord = (founded_result.latitude, founded_result.longitude)
-            self.cache_geolocation.add(scope_data, tuple_coord)
-            return tuple_coord
+            try:
+                tuple_coord = (founded_result.latitude, founded_result.longitude)
+                self.cache_geolocation.add(scope_data, tuple_coord)
+                return tuple_coord
+            except geopy.exc.GeocoderUnavailable:
+                return None
         else:
             return None
 
