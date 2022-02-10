@@ -44,12 +44,10 @@ class LocationManager:
 
         return result
 
-    # TODO: doctest!!!
     def get_location_rating(self):
         """
         A method that sorts data from the _get_year_rating method.
         :return: sorted _get_year_rating data and sliced as needed.
-        >>> self.get_location_rating()
         """
         movies = self._get_year_rating()
         movies.sort(key=lambda x: x.get_movie_distance_to_point(), reverse=True)

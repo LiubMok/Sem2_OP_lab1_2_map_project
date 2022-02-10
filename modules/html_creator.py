@@ -1,6 +1,8 @@
 """
 Module that generates html card
 """
+import webbrowser
+
 import folium
 
 from containers.data_cont import DataCont
@@ -10,6 +12,7 @@ class HtmlCreator:
     """
     Class for the map to create html maps with different feature groups.
     """
+
     def __init__(self, sorted_location, parsed_info):
         """
         Creating custom classes allows us to define new types of objects with particular
@@ -44,6 +47,10 @@ class HtmlCreator:
                 icon=folium.Icon(color=col)))
         return fg
 
+    def open_html_in_browser(self, path_to_html_file):
+        url = f'file:///{path_to_html_file}'
+        webbrowser.open(url, new=2)
+
     def create(self):
         """
         A method for creating marks on a map
@@ -57,3 +64,4 @@ class HtmlCreator:
         map_m.add_child(fg_cords)
         map_m.add_child(folium.LayerControl())
         map_m.save("Map_film.html")
+        self.open_html_in_browser("Map_film.html")
