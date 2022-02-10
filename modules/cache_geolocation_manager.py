@@ -74,7 +74,7 @@ class CacheGeolocationManagerFileSave:
         :param coord: coordinates as values.
         """
         self.get_count += 1
-        # print(f"location_checked -> {self.get_count} : cache add: {loc_name} -> {coord}")
+        print(f"location_checked -> {self.get_count} : cache add: {loc_name} -> {coord}")
         self._save_to_cache(loc_name, coord)
         self.cache_data[loc_name] = coord
 
