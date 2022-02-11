@@ -11,11 +11,11 @@ Using pip you should install all libs that are required and clone repository fro
 
 ##Required to install and used libs
 
--geopy
--folium
--argparse
--Optional
--csv
+- geopy
+- folium
+- argparse
+- Optional
+- csv
 
 ## Visuals and Usage
 
