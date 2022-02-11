@@ -1,12 +1,21 @@
 # Sem2_OP_lab1_2_map_project
 
-img...
+![image](https://user-images.githubusercontent.com/50233066/153674904-591183a7-1f3d-43cb-a02b-1f4dd9882f89.png)
+
 
 Python module that generate a Film_Map.html with up to 10 closest film location to input location.
 
 ## Instalation
 
-Using pip you should install all libs that are required in requirments.txt and clone repository from git.hub
+Using pip you should install all libs that are required and clone repository from git.hub
+
+##Required to install and used libs
+
+-geopy
+-folium
+-argparse
+-Optional
+-csv
 
 ## Visuals and Usage
 
